@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function SumaResta() {
+function SumaResta(props) {
     const [numero1, setNumero1] = useState(generarNumeroAleatorio());
     const [numero2, setNumero2] = useState(generarNumeroAleatorio());
     const [respuesta, setRespuesta] = useState('');
@@ -11,10 +11,14 @@ function SumaResta() {
     }
 
     function verificarRespuesta() {
-        if ((numero1 + numero2) === parseInt(respuesta)) {
+        const esCorrecto = (numero1 + numero2) === parseInt(respuesta);
+        
+        if (esCorrecto) {
             setResultado('¡Correcto!');
+            props.setRespuestaCorrecta(true); // Aquí notificamos a App.js si la respuesta es correcta
         } else {
             setResultado('Inténtalo de nuevo.');
+            props.setRespuestaCorrecta(false); // Aquí notificamos a App.js si la respuesta es incorrecta
         }
 
         setNumero1(generarNumeroAleatorio());
@@ -37,4 +41,3 @@ function SumaResta() {
 }
 
 export default SumaResta;
-
