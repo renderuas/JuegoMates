@@ -1,53 +1,65 @@
 import React, { useState } from 'react';
-import './App.css';
 import Lottie from 'react-lottie';
+import './App.css';
 import SumaResta from './components/SumaResta';
-import unicornio1 from './images/unicornio1.json';
+import unicornio from './images/unicornio1.json';
 import correcto from './images/correcto.json';
+import mal from './images/bad.json';
+
 
 function App() {
-    const [juegoSeleccionado, setJuegoSeleccionado] = useState(null);
-    const [respuestaCorrecta, setRespuestaCorrecta] = useState(false); // Nuevo estado
+  const [juegoSeleccionado, setJuegoSeleccionado] = useState(null);
+  const [respuestaCorrecta, setRespuestaCorrecta] = useState(null); // null: sin respuesta, true: respuesta correcta, false: respuesta incorrecta
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: respuestaCorrecta ? correcto : unicornio1, // Cambia según el estado
-        rendererSettings: {
-            preserveAspectRatio: "xMidYMid slice"
-        }
-    };
+  const animaciones = {
+    unicornio: unicornio,
+    correcto: correcto,
+    mal: mal
+  };
 
-    return (
-        <div className="app">
-            <header className="app-header">
-                <h1>¡Juego de Matemáticas para Niños!</h1>
-            </header>
+  let animacionActual = animaciones.unicornio;
+  if (respuestaCorrecta === true) {
+    animacionActual = animaciones.correcto;
+  } else if (respuestaCorrecta === false) {
+    animacionActual = animaciones.mal;
+  }
 
-            <section className="selection-section">
-                <h2>Elige un juego</h2>
-                <button 
-                    className="game-button" 
-                    onClick={() => setJuegoSeleccionado('sumaResta')}
-                >
-                    Sumas y Restas
-                </button>
-            </section>
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animacionActual,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
 
-            <section className="game-content">
-                <Lottie 
-                    options={defaultOptions}
-                    height={400}
-                    width={400}
-                />
-                {juegoSeleccionado === 'sumaResta' && <SumaResta setRespuestaCorrecta={setRespuestaCorrecta} />} 
-            </section>
+  return (
+    <div className="app">
+      <header className="app-header">
+        <h1>¡Juego de Matemáticas para Niños!</h1>
+      </header>
 
-            <footer className="app-footer">
-                © 2023 Juegos Matemáticos para Niños
-            </footer>
-        </div>
-    );
+      <section className="selection-section">
+        <h2>Elige un juego</h2>
+        <button 
+          className="game-button" 
+          onClick={() => setJuegoSeleccionado('sumaResta')}
+        >
+          Sumas y Restas
+        </button>
+        {/* Puedes agregar más botones para otros juegos aquí */}
+      </section>
+
+      <section className="game-content">
+        <Lottie options={defaultOptions} height={400} width={400} />
+        {juegoSeleccionado === 'sumaResta' && <SumaResta setRespuestaCorrecta={setRespuestaCorrecta} />}
+      </section>
+
+      <footer className="app-footer">
+        © 2023 Juegos Matemáticos para Niños
+      </footer>
+    </div>
+  );
 }
 
 export default App;
